@@ -1,0 +1,14 @@
+syntax = "proto3";
+message UpdateSignal {
+  fixed64 BSSID  = 1; // BSSID (MAC address) of the AP which sent this message
+  message StaResult {  // Represents measurements collected from one Wifi device
+    fixed64 StaMAC = 1;  // The device MAC address
+    message LinkMeasurement {  // Represents a measurement of signal level between Wifi client and a particular AP
+      fixed64 BSSID = 1;     // BSSID (MAC address) of the AP which this measurement was performed against
+      sint32 rssi = 2; // Received Signal Strength Indicator
+      sint32 snr = 3;  // Signal to noise ratio
+    }
+    repeated LinkMeasurement linkmeasurements = 2; // A Wifi client can deliver a message that aggregates measurements from several APs
+  }
+  repeated StaResult staresults = 2; // An UpdateSignal message can contain measurements from several Wifi clients.
+}
