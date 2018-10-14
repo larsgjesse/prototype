@@ -10,17 +10,17 @@ def sendMessage():
     
     staResults = message.staresults.add()
     linkMeasurement = staResults.linkmeasurements.add()
-    linkMeasurement.BSSID = 18838586676582 # 0x112233445566ULL
+    linkMeasurement.BSSID = 0x112233445566
     linkMeasurement.rssi = -55
     linkMeasurement.snr = 20 # New in V2
     linkMeasurement = staResults.linkmeasurements.add()
-    linkMeasurement.BSSID = 37603585123976 # 0x223344556688ULL
+    linkMeasurement.BSSID = 0x223344556688
     linkMeasurement.rssi = -75
     linkMeasurement.snr = 25 # New in V2
-    staResults.StaMAC = 20015998341291 # 0x1234567890abULL
+    staResults.StaMAC = 0x1234567890ab
     
-    message.BSSID = 18838586676582 # 0x112233445566ULL # Can be used directly...
-    print('-> from BSSID : ' + str(message.BSSID))     # ... but does not print nicely.
+    message.BSSID = 0x112233445566
+    print('-> from BSSID : ' + str(hex(message.BSSID)))
     
     return message.SerializeToString()
     
@@ -30,17 +30,17 @@ def receiveMessage(packedMessage):
     
     message.ParseFromString(packedMessage)
     message.BSSID
-    print('-> from BSSID : ' + str(message.BSSID))
+    print('-> from BSSID : ' + str(hex(message.BSSID)))
     
     for staResults in message.staresults:
-        print('--> Client MAC: ' + str(staResults.StaMAC))
+        print('--> Client MAC: ' + str(hex(staResults.StaMAC)))
         
         for linkMeasurement in staResults.linkmeasurements:
             snrValueText = ''
             # Handle the optional new field that appeared in protocol V2
             if (linkMeasurement.snr != 0):
                 snrValueText = ' with SNR = ' + str(linkMeasurement.snr)
-            print('---> Saw BSSID: ' + str(linkMeasurement.BSSID) + ' at ' + str(linkMeasurement.rssi) + ' dB' + snrValueText)
+            print('---> Saw BSSID: ' + str(hex(linkMeasurement.BSSID)) + ' at ' + str(linkMeasurement.rssi) + ' dB' + snrValueText)
             
             
 def writeBinaryDataToFile(binaryData, filename):
